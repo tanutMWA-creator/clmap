@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตรวจสอบ API</title>
+  <style>
+    #status {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .success {
+      color: green;
+    }
+    .fail {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h2>ผลลัพธ์จาก API</h2>
+  
+  <!-- ป้ายสถานะ -->
+  <div id="status">สถานะ: ยังไม่ได้ดึงข้อมูล</div>
+  
+  <button onclick="getData()">ดึงข้อมูล</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function getData() {
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+
+      try {
+        const response = await fetch("https://twqonline.mwa.co.th/TWQMSServicepublic/api/mwaonmobile/getStations");
+        
+        if (!response.ok) {
+          throw new Error("เกิดข้อผิดพลาด: " + response.status);
+        }
+
+        const data = await response.json(); // ถ้า API ส่ง JSON
+        resultEl.textContent = JSON.stringify(data, null, 2);
+
+        // อัปเดตสถานะเป็น success
+        statusEl.textContent = "สถานะ: Success";
+        statusEl.className = "success";
+
+      } catch (error) {
+        resultEl.textContent = "Error: " + error.message;
+
+        // อัปเดตสถานะเป็น fail
+        statusEl.textContent = "สถานะ: Fail";
+        statusEl.className = "fail";
+      }
+    }
+  </script>
+</body>
+</html>
