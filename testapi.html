@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตรวจสอบ API</title>
+</head>
+<body>
+  <h2>ผลลัพธ์จาก API</h2>
+  <button onclick="getData()">ดึงข้อมูล</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function getData() {
+      try {
+        const response = await fetch("https://twqonline.mwa.co.th/TWQMSServicepublic/api/mwaonmobile/getStations");
+        
+        if (!response.ok) {
+          throw new Error("เกิดข้อผิดพลาด: " + response.status);
+        }
+
+        const data = await response.json(); // ถ้า API ส่ง JSON
+        document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+
+      } catch (error) {
+        document.getElementById("result").textContent = "Error: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
